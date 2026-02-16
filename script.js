@@ -1,71 +1,158 @@
-// Función para abrir y cerrar el menú lateral
-function toggleMenu() {
-    const menuLateral = document.getElementById('menu-lateral');
-    menuLateral.classList.toggle('active');
+/* MENU MOBILE */
+
+function toggleMenu(){
+
+const navLinks = document.getElementById("navLinks");
+
+navLinks.classList.toggle("active");
+
 }
 
-// Función para cerrar el menú lateral al hacer clic en un enlace
-function closeMenu() {
-    const menuLateral = document.getElementById('menu-lateral');
-    menuLateral.classList.remove('active');
-}
 
+/* cerrar menu al hacer click */
 
+document.querySelectorAll(".nav-links a").forEach(link => {
 
-// Función para acerca de 
-document.addEventListener("DOMContentLoaded", function () {
-    const cards = document.querySelectorAll(".card");
-    const infoContainer = document.getElementById("info-container");
-    const infoText = document.getElementById("info-text");
+link.addEventListener("click", () => {
 
-    // Definir la información de cada tarjeta
-    const infoData = {
-        "Perfil": "Soy desarrolladora web con una gran pasión por el diseño y la programación. Disfruto transformar ideas en productos digitales funcionales, utilizando herramientas como HTML, CSS, JavaScript y frameworks que mejoran la interacción y eficiencia de las páginas web. Además, tengo experiencia en diseño en Blender y en herramientas como WordPress. Mi objetivo es desarrollar soluciones innovadoras que ayuden a marcas y empresas a destacar en el mundo digital. También cuento con experiencia en soporte técnico, lo que me permite brindar asistencia efectiva en áreas tecnológicas.",
-        "Habilidades": "Cuento con habilidades para establecer los requerimientos de un sistema de información e implementar su solución informática. Tengo experiencia en Modelamiento de Base de Datos, Diagramación de Modelos de Procesos de Negocio, gestión de Bases de Datos SQL. Además, trabajo con frameworks y lenguajes de programación como C#, Java, HTML5, CSS3, JavaScript, Bootstrap.",
-        "Pasatiempos": "En mi tiempo libre disfruto leer, escuchar música y explorar la naturaleza. Tengo una gran pasión por mi carrera y siempre estoy buscando nuevas formas de mejorar mis habilidades y conocimientos."
-    };
-    
-    
-    
+document.getElementById("navLinks").classList.remove("active");
 
-    // Manejar el clic en las tarjetas
-    cards.forEach(card => {
-        card.addEventListener("click", function () {
-            const title = this.querySelector("h3").textContent;
+});
 
-            // Si la misma tarjeta se clickea dos veces, se oculta la info
-            if (infoContainer.style.display === "block" && infoText.textContent === infoData[title]) {
-                infoContainer.style.display = "none";
-            } else {
-                infoText.textContent = infoData[title];
-                infoContainer.style.display = "block";
-            }
-        });
-    });
 });
 
 
+/* typing */
 
+const text="Desarrolladora Web";
 
+let i=0;
 
-// Función para carrusel
-let currentIndex = 0;
+function typing(){
 
-function moveSlide(direction) {
-    const items = document.querySelectorAll('.carousel-item');
-    const totalItems = items.length;
+if(i<text.length){
 
-    // Eliminar la clase 'active' de la imagen actual
-    items[currentIndex].classList.remove('active');
+document.querySelector(".typing").innerHTML+=text.charAt(i);
 
-    // Calcular el nuevo índice
-    currentIndex = (currentIndex + direction + totalItems) % totalItems;
+i++;
 
-    // Agregar la clase 'active' a la nueva imagen
-    items[currentIndex].classList.add('active');
+setTimeout(typing,50);
+
 }
 
-// Mover la imagen automáticamente cada 5 segundos
-setInterval(() => moveSlide(1), 5000);
+}
+
+typing();
+
+
+/* CARRUSEL */
+
+let courseIndex=0;
+
+const courses=document.querySelectorAll(".course-slide");
+const dots=document.querySelectorAll(".carousel-dots span");
+
+function showCourse(index){
+
+courses.forEach(course=>course.classList.remove("active"));
+dots.forEach(dot=>dot.classList.remove("active"));
+
+courses[index].classList.add("active");
+dots[index].classList.add("active");
+
+}
+
+function moveCourse(direction){
+
+courseIndex+=direction;
+
+if(courseIndex<0)
+courseIndex=courses.length-1;
+
+if(courseIndex>=courses.length)
+courseIndex=0;
+
+showCourse(courseIndex);
+
+}
+
+function goToCourse(index){
+
+courseIndex=index;
+
+showCourse(courseIndex);
+
+}
+
+
+/* autoplay */
+
+setInterval(()=>{
+
+moveCourse(1);
+
+},5000);
+
+
+showCourse(courseIndex);
+
+
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "01010101010101010101";
+const fontSize = 16;
+
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for(let i = 0; i < columns; i++){
+
+drops[i] = 1;
+
+}
+
+function drawMatrix(){
+
+ctx.fillStyle = "rgba(2,6,23,0.08)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "#3b82f6"; // azul moderno
+ctx.font = fontSize + "px monospace";
+
+for(let i = 0; i < drops.length; i++){
+
+const text = letters.charAt(
+Math.floor(Math.random() * letters.length)
+);
+
+ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+if(drops[i] * fontSize > canvas.height && Math.random() > 0.975){
+
+drops[i] = 0;
+
+}
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(drawMatrix, 35);
+
+
+window.addEventListener("resize", () => {
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+});
 
 
